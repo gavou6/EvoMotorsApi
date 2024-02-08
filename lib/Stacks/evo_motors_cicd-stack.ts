@@ -5,11 +5,12 @@ import {
   ShellStep,
 } from "aws-cdk-lib/pipelines";
 import { Construct } from "constructs";
+import { PipelineStage } from "./pipeline_stage-stack";
 
 export class EvoMotorsCiCdStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
-    new CodePipeline(this, "EvoMotorsPipelineId", {
+    const pipeline = new CodePipeline(this, "EvoMotorsPipelineId", {
       pipelineName: "EvoMotorsPipeline",
       synth: new ShellStep("Synth", {
         input: CodePipelineSource.gitHub("EvoMotorsMx/EvoMotorsApi", "master"),
@@ -17,5 +18,12 @@ export class EvoMotorsCiCdStack extends cdk.Stack {
         primaryOutputDirectory: "cdk.out",
       }),
     });
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const prodStage = pipeline.addStage(
+      new PipelineStage(this, "PipelineProdStage", {
+        stageName: "production",
+      }),
+    );
   }
 }
