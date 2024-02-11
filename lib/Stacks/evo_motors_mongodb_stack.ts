@@ -5,33 +5,40 @@ import {
   ServerlessInstanceProviderSettingsProviderName,
 } from "awscdk-resources-mongodbatlas";
 import { EvoMotorsSecretManager } from "../Constructs/secrets_manager-construct";
+import { ConfigProps } from "../../config/envConfig";
+import { config } from "dotenv";
+
+interface IEvoMotorsMongoAtlasStackProps extends cdk.StackProps {
+  config: Readonly<ConfigProps>;
+}
 
 export class EvoMotorsMongoAtlasStack extends cdk.Stack {
-  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+  constructor(
+    scope: Construct,
+    id: string,
+    props: IEvoMotorsMongoAtlasStackProps,
+  ) {
     super(scope, id, props);
 
-    const { secret } = new EvoMotorsSecretManager(this, "MongoDBSecrets", {
-      secretArn:
-        "arn:aws:secretsmanager:us-east-1:891377003070:secret:EvoMotorsDBSecrets-C8V2j0",
-    });
+    const { config } = props;
 
     new AtlasServerlessBasic(this, "AtlasServerlessBasic", {
       serverlessProps: {
-        name: secret.secretValueFromJson("name").toString(),
-        profile: secret.secretValueFromJson("profile").toString(),
+        name: config.MONGO_NAME,
+        profile: config.MONGO_PROFILE,
         continuousBackupEnabled: true,
         providerSettings: {
           providerName:
             ServerlessInstanceProviderSettingsProviderName.SERVERLESS,
-          regionName: secret.secretValueFromJson("region").toString(),
+          regionName: config.MONGO_REGION,
         },
         terminationProtectionEnabled: true,
       },
       projectProps: {
-        name: secret.secretValueFromJson("projectName").toString(),
-        orgId: secret.secretValueFromJson("orgId").toString(),
+        name: config.MONGO_PROJECT,
+        orgId: config.MONGO_ORG || "",
       },
-      profile: secret.secretValueFromJson("profile").toString(),
+      profile: config.MONGO_PROFILE,
     });
   }
 }

@@ -6,9 +6,14 @@ import {
 } from "aws-cdk-lib/pipelines";
 import { Construct } from "constructs";
 import { PipelineStage } from "./pipeline_stage-stack";
+import { ConfigProps } from "../../config/envConfig";
+
+interface IEvoMotorsCiCdStackProps extends cdk.StackProps {
+  config: Readonly<ConfigProps>;
+}
 
 export class EvoMotorsCiCdStack extends cdk.Stack {
-  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+  constructor(scope: Construct, id: string, props: IEvoMotorsCiCdStackProps) {
     super(scope, id, props);
     const pipeline = new CodePipeline(this, "EvoMotorsPipelineId", {
       pipelineName: "EvoMotorsPipeline",
@@ -23,6 +28,7 @@ export class EvoMotorsCiCdStack extends cdk.Stack {
     const prodStage = pipeline.addStage(
       new PipelineStage(this, "PipelineProdStage", {
         stageName: "production",
+        config: props.config,
       }),
     );
   }

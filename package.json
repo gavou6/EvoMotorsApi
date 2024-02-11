@@ -32,6 +32,7 @@
     "aws-cdk-lib": "2.126.0",
     "awscdk-resources-mongodbatlas": "^3.1.2",
     "constructs": "^10.0.0",
+    "dotenv": "^16.4.2",
     "source-map-support": "^0.5.21"
   }
 }
