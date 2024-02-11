@@ -4,9 +4,7 @@ import {
   AtlasServerlessBasic,
   ServerlessInstanceProviderSettingsProviderName,
 } from "awscdk-resources-mongodbatlas";
-import { EvoMotorsSecretManager } from "../Constructs/secrets_manager-construct";
 import { ConfigProps } from "../../config/envConfig";
-import { config } from "dotenv";
 
 interface IEvoMotorsMongoAtlasStackProps extends cdk.StackProps {
   config: Readonly<ConfigProps>;
@@ -36,7 +34,7 @@ export class EvoMotorsMongoAtlasStack extends cdk.Stack {
       },
       projectProps: {
         name: config.MONGO_PROJECT,
-        orgId: config.MONGO_ORG || "",
+        orgId: config.MONGO_ORG,
       },
       profile: config.MONGO_PROFILE,
     });
