@@ -12,6 +12,8 @@ export class PipelineStage extends Stage {
   constructor(scope: Construct, id: string, props: IPipelineStageProps) {
     super(scope, id, props);
 
+    console.log("Config props", { props });
+
     new EvoMotorsMongoAtlasStack(this, "EvoMotorsMongoStack", {
       config: props.config,
     });

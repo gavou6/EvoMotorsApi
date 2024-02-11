@@ -19,7 +19,7 @@ export class EvoMotorsCiCdStack extends cdk.Stack {
       pipelineName: "EvoMotorsPipeline",
       synth: new ShellStep("Synth", {
         input: CodePipelineSource.gitHub("EvoMotorsMx/EvoMotorsApi", "master"),
-        commands: ["npm ci", "npx cdk synth --all"],
+        commands: ["npm ci", "npx cdk synth"],
         primaryOutputDirectory: "cdk.out",
       }),
     });
