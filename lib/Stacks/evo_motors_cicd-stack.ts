@@ -21,6 +21,7 @@ export class EvoMotorsCiCdStack extends cdk.Stack {
         input: CodePipelineSource.gitHub("EvoMotorsMx/EvoMotorsApi", "master"),
         commands: ["npm ci", "npx cdk synth"],
         primaryOutputDirectory: "cdk.out",
+        env: props.config,
       }),
     });
 
