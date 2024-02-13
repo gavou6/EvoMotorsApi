@@ -20,7 +20,7 @@ export class EvoMotorsMongoAtlasStack extends cdk.Stack {
 
     const { config } = props;
 
-    new AtlasServerlessBasic(this, "AtlasServerlessBasic", {
+    new AtlasServerlessBasic(this, "AtlasServerlessEvoMotors", {
       serverlessProps: {
         name: config.MONGO_NAME,
         profile: config.MONGO_PROFILE,
@@ -35,6 +35,9 @@ export class EvoMotorsMongoAtlasStack extends cdk.Stack {
       projectProps: {
         name: config.MONGO_PROJECT,
         orgId: config.MONGO_ORG,
+      },
+      ipAccessListProps: {
+        accessList: [],
       },
       profile: config.MONGO_PROFILE,
     });
