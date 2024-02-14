@@ -9,6 +9,7 @@ export type ConfigProps = {
   MONGO_REGION: string;
   MONGO_PROJECT: string;
   MONGO_ORG: string;
+  MONGO_IP: string;
 };
 
 export const getConfig = (): ConfigProps => ({
@@ -17,4 +18,5 @@ export const getConfig = (): ConfigProps => ({
   MONGO_REGION: process.env.MONGO_REGION || "",
   MONGO_PROJECT: process.env.MONGO_PROJECT || "",
   MONGO_ORG: process.env.MONGO_ORG || "",
+  MONGO_IP: process.env.MONGO_IP || "",
 });

@@ -37,7 +37,7 @@ export class EvoMotorsMongoAtlasStack extends cdk.Stack {
         orgId: config.MONGO_ORG,
       },
       ipAccessListProps: {
-        accessList: [],
+        accessList: [{ ipAddress: config.MONGO_IP }],
       },
       profile: config.MONGO_PROFILE,
     });
