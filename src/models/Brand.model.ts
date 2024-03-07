@@ -7,6 +7,11 @@ interface BrandDocument extends Document {
   description?: string;
 }
 
+export type BrandInput = {
+  name: string;
+  description?: string;
+};
+
 const brandSchema = new Schema<BrandDocument>(
   {
     _id: {
