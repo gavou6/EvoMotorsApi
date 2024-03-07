@@ -3,21 +3,45 @@ import { Construct } from "constructs";
 import { EvoMotorsApiStack } from "./evo_motors_api-stack";
 import { EvoMotorsMongoAtlasStack } from "./evo_motors_mongodb_stack";
 import { ConfigProps } from "../../config/envConfig";
-
+import { AdminAuthStack } from "./evo_motors_auth-stack";
+import { LambdaStack } from "./evo_motors_lambda-stack";
+import * as _ from "lodash";
 interface IPipelineStageProps extends StageProps {
   config: Readonly<ConfigProps>;
+  stageName: string;
 }
 
 export class PipelineStage extends Stage {
   constructor(scope: Construct, id: string, props: IPipelineStageProps) {
     super(scope, id, props);
 
+    const envVariables: { [key: string]: string | undefined } = {
+      DATABASE_URL: process.env.DATABASE_URL,
+    };
+
+    const lambdaVariables = _.omitBy(envVariables, _.isUndefined) as {
+      [key: string]: string;
+    };
+
     new EvoMotorsMongoAtlasStack(this, "EvoMotorsMongoStack", {
       config: props.config,
     });
 
+    const evoMotorsAuthStack = new AdminAuthStack(
+      this,
+      "EvoMotorsAdminAuthStack",
+    );
+
+    const brandLambdaIntegration = new LambdaStack(this, "brandLambda", {
+      lambdaDirectory: "Brand",
+      envVariables: lambdaVariables,
+    });
+
     new EvoMotorsApiStack(this, "EvoMotorsApiStack", {
       stageName: props.stageName,
+      userPool: evoMotorsAuthStack.getUserPool(),
+      userPoolClient: evoMotorsAuthStack.getUserPoolClient(),
+      brandLambdaIntegration: brandLambdaIntegration.lambdaIntegration,
     });
   }
 }
