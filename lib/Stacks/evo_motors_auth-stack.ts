@@ -80,10 +80,7 @@ export class AdminAuthStack extends Stack {
         custom: true,
         userSrp: true,
       },
-      supportedIdentityProviders: [
-        UserPoolClientIdentityProvider.COGNITO,
-        UserPoolClientIdentityProvider.GOOGLE,
-      ],
+      supportedIdentityProviders: [UserPoolClientIdentityProvider.COGNITO],
     });
     new CfnOutput(this, "EvoMotorsPoolClientId", {
       value: this.userPoolClient.userPoolClientId,
