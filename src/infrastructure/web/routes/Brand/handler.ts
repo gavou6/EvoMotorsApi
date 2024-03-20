@@ -4,11 +4,11 @@ import {
   Context,
 } from "aws-lambda";
 import { connectToDatabase } from "../../../../shared/utils/db-connection";
-import { BrandRepository } from "../../../../core/infrastructure/persistence/repositories/BrandRepository";
 import { BrandService } from "../../../../core/domain/services/BrandService";
 import { BrandUseCases } from "../../../../core/application/use_cases/BrandUseCases";
 import { z } from "zod";
 import { HTTP_BAD_REQUEST } from "../../../../shared/constants";
+import { BrandRepository } from "../../../persistence/repositories/BrandRepository";
 
 const createBrandBodySchema = z.object({
   name: z.string(),
