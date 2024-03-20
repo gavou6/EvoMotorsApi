@@ -1,4 +1,4 @@
-import { Brand } from "../../domain/entities/Brand";
+import { Brand } from "../../../domain/entities/Brand";
 
 export interface IBrandUseCases {
   createBrand(name: string, description?: string): Promise<Brand>;

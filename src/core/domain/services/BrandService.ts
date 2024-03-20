@@ -1,6 +1,6 @@
-import { IBrandService } from "../../application/interfaces/IBrandService";
+import { IBrandService } from "../../application/interfaces/Brand/IBrandService";
 import { Brand } from "../entities/Brand";
-import { IBrandRepository } from "../../application/interfaces/IBrandRepository";
+import { IBrandRepository } from "../../application/interfaces/Brand/IBrandRepository";
 
 export class BrandService implements IBrandService {
   constructor(private brandRepository: IBrandRepository) {}

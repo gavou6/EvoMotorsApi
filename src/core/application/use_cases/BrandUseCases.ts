@@ -1,6 +1,6 @@
 import { Brand } from "../../domain/entities/Brand";
-import { IBrandService } from "../interfaces/IBrandService";
-import { IBrandUseCases } from "../interfaces/IBrandUseCases";
+import { IBrandService } from "../interfaces/Brand/IBrandService";
+import { IBrandUseCases } from "../interfaces/Brand/IBrandUseCases";
 
 export class BrandUseCases implements IBrandUseCases {
   private brandService: IBrandService;

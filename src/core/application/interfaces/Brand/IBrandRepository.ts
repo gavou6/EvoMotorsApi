@@ -1,4 +1,4 @@
-import { Brand } from "../../domain/entities/Brand";
+import { Brand } from "../../../domain/entities/Brand";
 
 export interface IBrandRepository {
   findById(id: string): Promise<Brand | null>;

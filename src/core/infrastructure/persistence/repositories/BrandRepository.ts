@@ -1,5 +1,5 @@
 import { Document } from "mongoose";
-import { IBrandRepository } from "../../../application/interfaces/IBrandRepository";
+import { IBrandRepository } from "../../../application/interfaces/Brand/IBrandRepository";
 import { Brand } from "../../../domain/entities/Brand";
 import BrandModel, { BrandDocument } from "../models/Brand.model";
 
