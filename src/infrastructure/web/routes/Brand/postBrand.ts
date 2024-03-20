@@ -3,29 +3,21 @@ import {
   APIGatewayProxyResult,
   Context,
 } from "aws-lambda";
-import {
-  HTTP_BAD_REQUEST,
-  HTTP_CREATED,
-  HTTP_NOT_FOUND,
-  HTTP_OK,
-} from "../../constants";
-import { connectToDatabase } from "../../utils/db-connection";
 import { z } from "zod";
-import Brand, { BrandInput } from "../../models/Brand.model";
+import Brand, {
+  BrandInput,
+} from "../../../../core/infrastructure/persistence/models/Brand.model";
+import { HTTP_BAD_REQUEST, HTTP_CREATED } from "../../../../shared/constants";
 
 const createBrandBodySchema = z.object({
   name: z.string(),
 });
-
-type CreatePostBodyInput = z.infer<typeof createBrandBodySchema>;
 
 export async function postBrand(
   event: APIGatewayProxyEvent,
   context: Context,
 ): Promise<APIGatewayProxyResult> {
   context.callbackWaitsForEmptyEventLoop = false;
-
-  await connectToDatabase();
 
   const payload = JSON.parse(event.body ?? "{}");
   const validationResult = createBrandBodySchema.safeParse(payload);
@@ -39,7 +31,7 @@ export async function postBrand(
     const [createdPost] = await Brand.create([brandInput]);
 
     return {
-      statusCode: HTTP_OK,
+      statusCode: HTTP_CREATED,
       headers: { "Content-Type": "text/json" },
       body: JSON.stringify(createdPost),
     };
@@ -47,7 +39,7 @@ export async function postBrand(
     return {
       statusCode: HTTP_BAD_REQUEST,
       headers: { "Content-Type": "text/json" },
-      // @ts-ignore
+
       body: JSON.stringify({
         message: "Invalid input data",
         errors: validationResult.error,

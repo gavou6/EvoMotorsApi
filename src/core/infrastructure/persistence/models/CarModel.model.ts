@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
 import { v4 as uuidV4 } from "uuid";
-import { EngineType, Transmission } from "../enums";
+import { EngineType, Transmission } from "../../../../shared/enums";
 
 interface CarModelDocument extends Document {
   _id: string;

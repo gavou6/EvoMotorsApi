@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
 import { v4 as uuidV4 } from "uuid";
-import { FileType } from "../enums";
+import { FileType } from "../../../../shared/enums";
 
 interface FileDocument extends Document {
   _id: string;

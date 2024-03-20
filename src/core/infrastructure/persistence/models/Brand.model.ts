@@ -1,8 +1,7 @@
 import mongoose, { Schema, Document } from "mongoose";
 import { v4 as uuidV4 } from "uuid";
 
-interface BrandDocument extends Document {
-  _id: string;
+export interface BrandDocument extends Document {
   name: string;
   description?: string;
 }

@@ -3,13 +3,8 @@ import {
   APIGatewayProxyResult,
   Context,
 } from "aws-lambda";
-import {
-  HTTP_BAD_REQUEST,
-  HTTP_CREATED,
-  HTTP_NOT_FOUND,
-  HTTP_OK,
-} from "../../constants";
-import { connectToDatabase } from "../../utils/db-connection";
+import { HTTP_BAD_REQUEST, HTTP_CREATED } from "../../../../shared/constants";
+import { connectToDatabase } from "../../../../shared/utils/db-connection";
 
 export async function getBrands(
   event: APIGatewayProxyEvent,

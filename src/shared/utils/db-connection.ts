@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-let databaseConnection: any = null;
+let databaseConnection: unknown = null;
 const databaseURL = process.env.DATABASE_URL;
 
 export const connectToDatabase = async () => {
