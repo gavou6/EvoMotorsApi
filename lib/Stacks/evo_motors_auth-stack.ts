@@ -1,8 +1,6 @@
 import { CfnOutput, RemovalPolicy, Stack, StackProps } from "aws-cdk-lib";
 import {
   AccountRecovery,
-  CfnIdentityPool,
-  CfnIdentityPoolRoleAttachment,
   CfnUserPoolGroup,
   UserPool,
   UserPoolClient,
@@ -10,15 +8,20 @@ import {
 } from "aws-cdk-lib/aws-cognito";
 import { Construct } from "constructs";
 
-export class AuthStack extends Stack {
+export class AdminAuthStack extends Stack {
   public userPool: UserPool;
-  private userPoolClient: UserPoolClient;
+  public userPoolClient: UserPoolClient;
+  private adminGroup: CfnUserPoolGroup;
+  private customerGroup: CfnUserPoolGroup;
+  private sellerGroup: CfnUserPoolGroup;
+  private technicianGroup: CfnUserPoolGroup;
 
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
     this.createUserPool();
     this.createUserPoolClient();
+    this.createUserGroups();
   }
 
   private createUserPool() {
@@ -35,6 +38,22 @@ export class AuthStack extends Stack {
         },
         givenName: {
           required: true,
+          mutable: true,
+        },
+        phoneNumber: {
+          required: true,
+          mutable: true,
+        },
+        email: {
+          required: true,
+          mutable: true,
+        },
+        lastUpdateTime: {
+          required: false,
+          mutable: false,
+        },
+        birthdate: {
+          required: false,
           mutable: true,
         },
       },
@@ -61,17 +80,56 @@ export class AuthStack extends Stack {
         custom: true,
         userSrp: true,
       },
-      supportedIdentityProviders: [
-        UserPoolClientIdentityProvider.COGNITO,
-        UserPoolClientIdentityProvider.GOOGLE,
-      ],
+      supportedIdentityProviders: [UserPoolClientIdentityProvider.COGNITO],
     });
     new CfnOutput(this, "EvoMotorsPoolClientId", {
       value: this.userPoolClient.userPoolClientId,
     });
   }
 
+  private createUserGroups() {
+    this.adminGroup = new CfnUserPoolGroup(this, "AdminGroup", {
+      groupName: "admin-user-group",
+      userPoolId: this.userPool.userPoolId,
+    });
+
+    new CfnOutput(this, "AdminGroupId", {
+      value: this.adminGroup.logicalId,
+    });
+
+    this.customerGroup = new CfnUserPoolGroup(this, "CustomerGroup", {
+      groupName: "customer-user-group",
+      userPoolId: this.userPool.userPoolId,
+    });
+
+    new CfnOutput(this, "CustomerGroupId", {
+      value: this.customerGroup.logicalId,
+    });
+
+    this.sellerGroup = new CfnUserPoolGroup(this, "SellerGroup", {
+      groupName: "seller-user-group",
+      userPoolId: this.userPool.userPoolId,
+    });
+
+    new CfnOutput(this, "SellerGroupId", {
+      value: this.sellerGroup.logicalId,
+    });
+
+    this.technicianGroup = new CfnUserPoolGroup(this, "TechnicianGroup", {
+      groupName: "technician-user-group",
+      userPoolId: this.userPool.userPoolId,
+    });
+
+    new CfnOutput(this, "TechnicianGroupId", {
+      value: this.technicianGroup.logicalId,
+    });
+  }
+
   getUserPool(): UserPool {
     return this.userPool;
+  }
+
+  getUserPoolClient(): UserPoolClient {
+    return this.userPoolClient;
   }
 }

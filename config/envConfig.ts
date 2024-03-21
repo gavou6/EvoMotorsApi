@@ -10,9 +10,9 @@ export type ConfigProps = {
   MONGO_PROJECT: string;
   MONGO_ORG: string;
   MONGO_IP: string;
-  DB_USERNAME: string
-  DB_PASSWORD: string
-  DB_NAME: string
+  DB_USERNAME: string;
+  DB_PASSWORD: string;
+  DB_NAME: string;
 };
 
 export const getConfig = (): ConfigProps => ({
