@@ -25,6 +25,7 @@ export class EvoMotorsApiStack extends cdk.Stack {
           "X-Amz-Date",
           "Authorization",
           "X-Api-Key",
+          "IdToken",
         ],
         allowMethods: [
           CorsHttpMethod.OPTIONS,

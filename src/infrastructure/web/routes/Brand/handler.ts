@@ -9,6 +9,9 @@ import { BrandUseCases } from "../../../../core/application/use_cases/BrandUseCa
 import { z } from "zod";
 import { HTTP_BAD_REQUEST } from "../../../../shared/constants";
 import { BrandRepository } from "../../../persistence/repositories/BrandRepository";
+import { decodeToken } from "../../../../shared/utils/userDecoder";
+import { CUSTOMER_ROLE } from "../../../../shared/constants/roles";
+import { IIdToken } from "../../../security/Auth";
 
 const createBrandBodySchema = z.object({
   name: z.string(),
@@ -32,6 +35,36 @@ export async function handler(
   context: Context,
 ): Promise<APIGatewayProxyResult> {
   context.callbackWaitsForEmptyEventLoop = false;
+
+  const idToken = event.headers["IdToken"];
+
+  if (!idToken) {
+    return {
+      statusCode: 401,
+      body: JSON.stringify({ message: "Authorization token is required" }),
+    };
+  }
+
+  let decoded;
+  try {
+    decoded = decodeToken(idToken) as IIdToken;
+    const groups = decoded["cognito:groups"] || [];
+
+    if (!groups.includes(CUSTOMER_ROLE)) {
+      return {
+        statusCode: 403,
+        body: JSON.stringify({
+          message: "Access denied: user is not a member of customer-user-group",
+        }),
+      };
+    }
+  } catch (error) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({ message: "Invalid token" }),
+    };
+  }
+
   await connectToDatabase();
   const brandRepository = new BrandRepository();
   const brandService = new BrandService(brandRepository);
