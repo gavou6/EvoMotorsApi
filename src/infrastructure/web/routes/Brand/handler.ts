@@ -36,7 +36,7 @@ export async function handler(
 ): Promise<APIGatewayProxyResult> {
   context.callbackWaitsForEmptyEventLoop = false;
 
-  const idToken = event.headers["IdToken"];
+  const idToken = event["headers"]["IdToken"];
 
   if (!idToken) {
     return {
@@ -50,11 +50,11 @@ export async function handler(
     decoded = decodeToken(idToken) as IIdToken;
     const groups = decoded["cognito:groups"] || [];
 
-    if (!groups.includes(CUSTOMER_ROLE)) {
+    if (groups.includes(CUSTOMER_ROLE)) {
       return {
         statusCode: 403,
         body: JSON.stringify({
-          message: "Access denied: user is not a member of customer-user-group",
+          message: "Access denied: user is a member of customer group",
         }),
       };
     }
