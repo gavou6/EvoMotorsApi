@@ -40,6 +40,11 @@ export class EvoMotorsMongoAtlasStack extends cdk.Stack {
         accessList: [{ ipAddress: config.MONGO_IP }],
       },
       profile: config.MONGO_PROFILE,
+      dbUserProps: {
+        username: config.DB_USERNAME,
+        password: config.DB_PASSWORD,
+        databaseName: config.DB_NAME,
+      },
     });
   }
 }

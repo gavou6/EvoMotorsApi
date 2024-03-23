@@ -7,7 +7,18 @@ import { connectToDatabase } from "../../../../shared/utils/db-connection";
 import { BrandService } from "../../../../core/domain/services/BrandService";
 import { BrandUseCases } from "../../../../core/application/use_cases/BrandUseCases";
 import { z } from "zod";
-import { HTTP_BAD_REQUEST } from "../../../../shared/constants";
+import {
+  DELETE,
+  GET,
+  HTTP_BAD_REQUEST,
+  HTTP_CREATED,
+  HTTP_FORBIDDEN,
+  HTTP_INTERNAL_SERVER_ERROR,
+  HTTP_OK,
+  HTTP_UNAUTHORIZED,
+  POST,
+  PUT,
+} from "../../../../shared/constants";
 import { BrandRepository } from "../../../persistence/repositories/BrandRepository";
 import { decodeToken } from "../../../../shared/utils/userDecoder";
 import { CUSTOMER_ROLE } from "../../../../shared/constants/roles";
@@ -36,11 +47,11 @@ export async function handler(
 ): Promise<APIGatewayProxyResult> {
   context.callbackWaitsForEmptyEventLoop = false;
 
-  const idToken = event.headers["IdToken"];
+  const idToken = event["headers"]["IdToken"];
 
   if (!idToken) {
     return {
-      statusCode: 401,
+      statusCode: HTTP_UNAUTHORIZED,
       body: JSON.stringify({ message: "Authorization token is required" }),
     };
   }
@@ -50,17 +61,17 @@ export async function handler(
     decoded = decodeToken(idToken) as IIdToken;
     const groups = decoded["cognito:groups"] || [];
 
-    if (!groups.includes(CUSTOMER_ROLE)) {
+    if (groups.includes(CUSTOMER_ROLE)) {
       return {
-        statusCode: 403,
+        statusCode: HTTP_FORBIDDEN,
         body: JSON.stringify({
-          message: "Access denied: user is not a member of customer-user-group",
+          message: "Access denied: user is a member of customer group",
         }),
       };
     }
   } catch (error) {
     return {
-      statusCode: 400,
+      statusCode: HTTP_BAD_REQUEST,
       body: JSON.stringify({ message: "Invalid token" }),
     };
   }
@@ -72,7 +83,7 @@ export async function handler(
 
   try {
     switch (event.httpMethod) {
-      case "GET":
+      case GET:
         if (event.pathParameters) {
           const pathValidationResult = getBrandBody.safeParse(
             event.pathParameters,
@@ -92,18 +103,18 @@ export async function handler(
             pathValidationResult.data.id,
           );
           return {
-            statusCode: 200,
+            statusCode: HTTP_OK,
             body: JSON.stringify(brand),
           };
         } else {
           const brands = await brandUseCases.findAllBrands();
           return {
-            statusCode: 200,
+            statusCode: HTTP_OK,
             body: JSON.stringify(brands),
           };
         }
 
-      case "POST": {
+      case POST: {
         const payload = JSON.parse(event.body ?? "{}");
         const validationResult = createBrandBodySchema.safeParse(payload);
         let newBrand;
@@ -122,18 +133,21 @@ export async function handler(
         }
 
         return {
-          statusCode: 201,
+          statusCode: HTTP_CREATED,
           body: JSON.stringify(newBrand),
         };
       }
 
-      case "PUT": {
+      case PUT: {
         const payload = JSON.parse(event.body ?? "{}");
-        const validationResult = updateBrandBodySchema.safeParse(payload);
+        const validationResult = updateBrandBodySchema.safeParse({
+          id: event.pathParameters?.id,
+          name: payload.name,
+        });
         let updatedBrand;
         if (validationResult.success) {
           updatedBrand = await brandUseCases.updateBrand(
-            payload.id,
+            event.pathParameters?.id!,
             payload.name,
           );
         } else {
@@ -148,12 +162,12 @@ export async function handler(
           };
         }
         return {
-          statusCode: 201,
+          statusCode: HTTP_OK,
           body: JSON.stringify(updatedBrand),
         };
       }
 
-      case "DELETE": {
+      case DELETE: {
         const payload = JSON.parse(event.body ?? "{}");
         const validationResult = removeBrandBody.safeParse(payload);
         if (validationResult.success) {
@@ -170,7 +184,7 @@ export async function handler(
           };
         }
         return {
-          statusCode: 201,
+          statusCode: HTTP_OK,
           body: JSON.stringify(
             `{id: ${payload.id}, message: "Brand removed successfully"}`,
           ),
@@ -179,13 +193,13 @@ export async function handler(
 
       default:
         return {
-          statusCode: 405,
+          statusCode: HTTP_BAD_REQUEST,
           body: JSON.stringify({ message: "Method Not Allowed" }),
         };
     }
   } catch (error) {
     return {
-      statusCode: 500,
+      statusCode: HTTP_INTERNAL_SERVER_ERROR,
       body: JSON.stringify({
         message: error instanceof Error ? error.message : "Server error",
       }),

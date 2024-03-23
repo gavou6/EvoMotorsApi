@@ -32,7 +32,7 @@ export class BrandService implements IBrandService {
     // Aquí podrías añadir lógica para validar los cambios o procesarlos antes de actualizar.
     brandToUpdate.name = name;
     brandToUpdate.description = description;
-    return this.brandRepository.save(brandToUpdate);
+    return this.brandRepository.update(id, brandToUpdate);
   }
 
   async deleteBrand(id: string): Promise<void> {

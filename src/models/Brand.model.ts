@@ -1,15 +1,11 @@
 import mongoose, { Schema, Document } from "mongoose";
 import { v4 as uuidV4 } from "uuid";
 
-export interface BrandDocument extends Document {
+interface BrandDocument extends Document {
+  _id: string;
   name: string;
   description?: string;
 }
-
-export type BrandInput = {
-  name: string;
-  description?: string;
-};
 
 const brandSchema = new Schema<BrandDocument>(
   {
@@ -31,13 +27,6 @@ const brandSchema = new Schema<BrandDocument>(
     timestamps: true,
   },
 );
-
-brandSchema.pre("save", function (next) {
-  if (this.name) {
-    this.name = this.name.toUpperCase();
-  }
-  next();
-});
 
 const Brand = mongoose.model<BrandDocument>("Brand", brandSchema);
 
