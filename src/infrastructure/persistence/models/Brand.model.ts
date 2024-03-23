@@ -32,6 +32,13 @@ const brandSchema = new Schema<BrandDocument>(
   },
 );
 
+brandSchema.pre("save", function (next) {
+  if (this.name) {
+    this.name = this.name.toUpperCase();
+  }
+  next();
+});
+
 const Brand = mongoose.model<BrandDocument>("Brand", brandSchema);
 
 export default Brand;
