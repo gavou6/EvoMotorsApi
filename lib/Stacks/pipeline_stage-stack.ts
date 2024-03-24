@@ -23,9 +23,10 @@ export class PipelineStage extends Stage {
       [key: string]: string;
     };
 
-    new EvoMotorsMongoAtlasStack(this, "EvoMotorsMongoStack", {
+    // TODO: Already created, causing issues after stack delition
+    /* new EvoMotorsMongoAtlasStack(this, "EvoMotorsMongoStack", {
       config: props.config,
-    });
+    }); */
 
     const evoMotorsAuthStack = new AdminAuthStack(
       this,
