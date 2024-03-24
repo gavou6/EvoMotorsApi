@@ -1,5 +1,5 @@
 import {
-  APIGatewayProxyEvent,
+  APIGatewayProxyEventV2,
   APIGatewayProxyResult,
   Context,
 } from "aws-lambda";
@@ -42,12 +42,12 @@ const getBrandBody = z.object({
 });
 
 export async function handler(
-  event: APIGatewayProxyEvent,
+  event: APIGatewayProxyEventV2,
   context: Context,
 ): Promise<APIGatewayProxyResult> {
   context.callbackWaitsForEmptyEventLoop = false;
 
-  const idToken = event["headers"]["IdToken"];
+  const idToken = event.headers["idtoken"];
 
   if (!idToken) {
     return {
@@ -82,7 +82,7 @@ export async function handler(
   const brandUseCases = new BrandUseCases(brandService);
 
   try {
-    switch (event.httpMethod) {
+    switch (event.requestContext.http.method) {
       case GET:
         if (event.pathParameters) {
           const pathValidationResult = getBrandBody.safeParse(
