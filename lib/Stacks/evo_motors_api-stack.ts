@@ -58,7 +58,7 @@ export class EvoMotorsApiStack extends cdk.Stack {
     });
 
     evoMotorsAdminHttpApi.addRoutes({
-      path: "brand/{brandId}",
+      path: "/brand/{brandId}",
       methods: [HttpMethod.GET, HttpMethod.PUT, HttpMethod.DELETE],
       integration: props.brandLambdaIntegration,
       authorizer,
