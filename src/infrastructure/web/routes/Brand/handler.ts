@@ -85,9 +85,9 @@ export async function handler(
     switch (event.requestContext.http.method) {
       case GET:
         if (event.pathParameters) {
-          const pathValidationResult = getBrandBody.safeParse(
-            event.pathParameters,
-          );
+          const pathValidationResult = getBrandBody.safeParse({
+            id: event.pathParameters.brandId,
+          });
           if (!pathValidationResult.success) {
             return {
               statusCode: HTTP_BAD_REQUEST,
@@ -140,27 +140,39 @@ export async function handler(
 
       case PUT: {
         const payload = JSON.parse(event.body ?? "{}");
+        let updatedBrand;
+
+        if (!event.pathParameters || !event.pathParameters.brandId) {
+          return {
+            statusCode: HTTP_BAD_REQUEST,
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              message: "Brand ID is required in the path",
+            }),
+          };
+        }
+
         const validationResult = updateBrandBodySchema.safeParse({
-          id: event.pathParameters?.id,
+          id: event.pathParameters.brandId,
           name: payload.name,
         });
-        let updatedBrand;
+
         if (validationResult.success) {
           updatedBrand = await brandUseCases.updateBrand(
-            event.pathParameters?.id!,
+            event.pathParameters.brandId,
             payload.name,
           );
         } else {
           return {
             statusCode: HTTP_BAD_REQUEST,
             headers: { "Content-Type": "text/json" },
-
             body: JSON.stringify({
               message: "Invalid input data",
               errors: validationResult.error,
             }),
           };
         }
+
         return {
           statusCode: HTTP_OK,
           body: JSON.stringify(updatedBrand),
@@ -168,26 +180,26 @@ export async function handler(
       }
 
       case DELETE: {
-        const payload = JSON.parse(event.body ?? "{}");
-        const validationResult = removeBrandBody.safeParse(payload);
-        if (validationResult.success) {
-          await brandUseCases.removeBrand(payload.id);
-        } else {
+        if (!event.pathParameters || !event.pathParameters.id) {
           return {
             statusCode: HTTP_BAD_REQUEST,
-            headers: { "Content-Type": "text/json" },
-
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              message: "Invalid input data",
-              errors: validationResult.error,
+              message: "Brand ID is required in the path",
             }),
           };
         }
+
+        const brandId = event.pathParameters.id;
+
+        await brandUseCases.removeBrand(brandId);
+
         return {
           statusCode: HTTP_OK,
-          body: JSON.stringify(
-            `{id: ${payload.id}, message: "Brand removed successfully"}`,
-          ),
+          body: JSON.stringify({
+            id: brandId,
+            message: "Brand removed successfully",
+          }),
         };
       }
 
