@@ -180,7 +180,7 @@ export async function handler(
       }
 
       case DELETE: {
-        if (!event.pathParameters || !event.pathParameters.id) {
+        if (!event.pathParameters || !event.pathParameters.brandId) {
           return {
             statusCode: HTTP_BAD_REQUEST,
             headers: { "Content-Type": "application/json" },
@@ -190,17 +190,40 @@ export async function handler(
           };
         }
 
-        const brandId = event.pathParameters.id;
+        const pathValidationResult = removeBrandBody.safeParse({
+          id: event.pathParameters.brandId,
+        });
 
-        await brandUseCases.removeBrand(brandId);
+        if (!pathValidationResult.success) {
+          return {
+            statusCode: HTTP_BAD_REQUEST,
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              message: "Invalid or missing brand ID",
+              errors: pathValidationResult.error.issues,
+            }),
+          };
+        }
 
-        return {
-          statusCode: HTTP_OK,
-          body: JSON.stringify({
-            id: brandId,
-            message: "Brand removed successfully",
-          }),
-        };
+        const brandId = pathValidationResult.data.id;
+
+        try {
+          await brandUseCases.removeBrand(brandId);
+          return {
+            statusCode: HTTP_OK,
+            body: JSON.stringify({
+              id: brandId,
+              message: "Brand removed successfully",
+            }),
+          };
+        } catch (error) {
+          return {
+            statusCode: HTTP_INTERNAL_SERVER_ERROR,
+            body: JSON.stringify({
+              message: "An error occurred while removing the brand",
+            }),
+          };
+        }
       }
 
       default:
