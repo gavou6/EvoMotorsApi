@@ -1,5 +1,15 @@
 import mongoose, { Schema, Document } from "mongoose";
 import { v4 as uuidV4 } from "uuid";
+import { ProductPriceDocument } from "./ProductPrice";
+
+interface Detail {
+  productPriceId: string;
+  quantity: number;
+  discount: {
+    type: string;
+    value: number;
+  };
+}
 
 interface ReceiptDocument extends Document {
   _id: string;
@@ -16,6 +26,7 @@ interface ReceiptDocument extends Document {
   date: Date;
   finalPrice: number;
   arriveTime: Date;
+  details: Detail[];
 }
 
 const receiptSchema = new Schema<ReceiptDocument>(
@@ -92,6 +103,19 @@ const receiptSchema = new Schema<ReceiptDocument>(
       type: Date,
       required: true,
     },
+    details: [
+      {
+        productPriceId: {
+          type: String,
+          ref: "ProductPrice",
+        },
+        quantity: Number,
+        discount: {
+          type: String, // Por ejemplo, porcentaje o cantidad fija
+          value: Number, // El valor del descuento, podría ser un porcentaje (ej. 10 para un 10%) o una cantidad fija (ej. 50 para un descuento de $50)
+        },
+      },
+    ],
   },
   {
     timestamps: true,
