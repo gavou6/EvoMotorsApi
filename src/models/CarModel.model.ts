@@ -12,8 +12,7 @@ interface CarModelDocument extends Document {
   combustion: string;
   transmission: Transmission;
   engineType: EngineType;
-  productId: string[];
-  fileId: string[];
+  files: string[];
 }
 
 const carModelSchema = new Schema<CarModelDocument>(
@@ -57,13 +56,7 @@ const carModelSchema = new Schema<CarModelDocument>(
       required: true,
       enum: Object.values(EngineType),
     },
-    productId: [
-      {
-        type: String,
-        ref: "Product",
-      },
-    ],
-    fileId: [
+    files: [
       {
         type: String,
         ref: "File",
