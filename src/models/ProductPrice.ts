@@ -17,13 +17,13 @@ const productPriceSchema = new Schema<ProductPriceDocument>(
     productId: {
       type: String,
       required: true,
-      ref: "Product", // Asumiendo que existe un modelo Product
+      ref: "Product",
     },
     carModelId: [
       {
         type: String,
         required: true,
-        ref: "CarModel", // Asumiendo que existe un modelo CarModel
+        ref: "CarModel",
       },
     ],
     price: {
@@ -32,7 +32,7 @@ const productPriceSchema = new Schema<ProductPriceDocument>(
     },
   },
   {
-    timestamps: true, // Esto agregará automáticamente campos para `createdAt` y `updatedAt`
+    timestamps: true,
   },
 );
 
