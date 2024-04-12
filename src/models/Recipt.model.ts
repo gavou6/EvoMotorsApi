@@ -111,8 +111,8 @@ const receiptSchema = new Schema<ReceiptDocument>(
         },
         quantity: Number,
         discount: {
-          type: String, // Por ejemplo, porcentaje o cantidad fija
-          value: Number, // El valor del descuento, podría ser un porcentaje (ej. 10 para un 10%) o una cantidad fija (ej. 50 para un descuento de $50)
+          type: String,
+          value: Number,
         },
       },
     ],
