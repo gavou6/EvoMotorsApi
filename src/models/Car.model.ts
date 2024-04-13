@@ -1,5 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
 import { v4 as uuidV4 } from "uuid";
+import { Transmission } from "../shared/enums";
 
 interface CarDocument extends Document {
   _id: string;
@@ -12,6 +13,7 @@ interface CarDocument extends Document {
   plates: string;
   carModelId: string;
   witnessId: string[];
+  transmission: Transmission;
 }
 
 const carSchema = new Schema<CarDocument>(
