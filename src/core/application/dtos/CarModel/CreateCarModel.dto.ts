@@ -8,5 +8,5 @@ export type CreateCarModelDTO = {
   cylinder: number;
   combustion: CombustionType;
   engineType: EngineType;
-  files: string[];
+  files: string;
 };
