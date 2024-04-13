@@ -4,7 +4,7 @@ export enum EngineType {
   SuperCargado = "Super Cargado",
 }
 
-export enum Combustion {
+export enum CombustionType {
   Diesel = "Diesel",
   Gasolina = "Gasolina",
 }

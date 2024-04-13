@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
 import { v4 as uuidV4 } from "uuid";
-import { EngineType, Transmission } from "../shared/enums";
+import { CombustionType, EngineType } from "../shared/enums";
 
 interface CarModelDocument extends Document {
   _id: string;
@@ -9,8 +9,7 @@ interface CarModelDocument extends Document {
   year: string;
   engine: string;
   cylinder: number;
-  combustion: string;
-  transmission: Transmission;
+  combustion: CombustionType;
   engineType: EngineType;
   files: string[];
 }
@@ -57,11 +56,7 @@ const carModelSchema = new Schema<CarModelDocument>(
     combustion: {
       type: String,
       required: true,
-    },
-    transmission: {
-      type: String,
-      required: true,
-      enum: Object.values(Transmission),
+      enum: Object.values(CombustionType),
     },
     engineType: {
       type: String,

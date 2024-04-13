@@ -1,4 +1,4 @@
-import { EngineType, Transmission } from "../../../../shared/enums";
+import { CombustionType, EngineType } from "../../../../shared/enums";
 
 export type UpdateCarModelDTO = {
   id: string;
@@ -7,8 +7,7 @@ export type UpdateCarModelDTO = {
   year: string;
   engine: string;
   cylinder: number;
-  combustion: string;
-  transmission: Transmission;
+  combustion: CombustionType;
   engineType: EngineType;
   files: string[];
 };
