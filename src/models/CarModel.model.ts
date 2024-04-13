@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
 import { v4 as uuidV4 } from "uuid";
-import { EngineType, Transmission } from "../enums";
+import { EngineType, Transmission } from "../shared/enums";
 
 interface CarModelDocument extends Document {
   _id: string;
@@ -8,7 +8,7 @@ interface CarModelDocument extends Document {
   brandId: string;
   year: string;
   engine: string;
-  cylinder: string;
+  cylinder: number;
   combustion: string;
   transmission: Transmission;
   engineType: EngineType;
@@ -33,13 +33,25 @@ const carModelSchema = new Schema<CarModelDocument>(
     year: {
       type: String,
       required: true,
+      validate: {
+        validator: function (v: string) {
+          const yearNum = parseInt(v, 10);
+          return (
+            /^\d{4}$/.test(v) &&
+            yearNum >= 1886 &&
+            yearNum <= new Date().getFullYear()
+          );
+        },
+        message: (props: { value: string }) =>
+          `${props.value} is not a valid year! Year must be a four-digit number between 1886 and the current year.`,
+      },
     },
     engine: {
       type: String,
       required: true,
     },
     cylinder: {
-      type: String,
+      type: Number,
       required: true,
     },
     combustion: {
