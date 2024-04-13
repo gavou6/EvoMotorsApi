@@ -11,7 +11,7 @@ export type BrandInput = {
   description?: string;
 };
 
-const brandSchema = new Schema<BrandDocument>(
+const brandSchema: Schema<BrandDocument> = new Schema<BrandDocument>(
   {
     _id: {
       type: String,
