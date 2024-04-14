@@ -1,4 +1,4 @@
-import { EngineType, Transmission } from "../../../shared/enums";
+import { CombustionType, EngineType } from "../../../shared/enums";
 
 export class CarModel {
   public id?: string;
@@ -7,10 +7,9 @@ export class CarModel {
     public name: string,
     public brandId: string,
     public year: string,
-    public engine: string,
-    public cylinder: string,
-    public combustion: string,
-    public transmission: Transmission,
+    public engineSize: string,
+    public cylinder: number,
+    public combustion: CombustionType,
     public engineType: EngineType,
   ) {}
 

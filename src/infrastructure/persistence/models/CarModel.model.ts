@@ -1,21 +1,19 @@
 import mongoose, { Schema, Document } from "mongoose";
 import { v4 as uuidV4 } from "uuid";
-import { Combustion, EngineType } from "../../../shared/enums";
+import { CombustionType, EngineType } from "../../../shared/enums";
 
-interface CarModelDocument extends Document {
-  _id: string;
+export interface CarModelDocument extends Document {
   name: string;
   brandId: string;
   year: string;
   engineSize: string;
-  cylinder: string;
-  combustion: Combustion;
+  cylinder: number;
+  combustion: CombustionType;
   engineType: EngineType;
-  productId: string[];
-  fileId: string[];
+  files?: string[];
 }
 
-const carModelSchema = new Schema<CarModelDocument>(
+const carModelSchema: Schema<CarModelDocument> = new Schema<CarModelDocument>(
   {
     _id: {
       type: String,
@@ -33,32 +31,38 @@ const carModelSchema = new Schema<CarModelDocument>(
     year: {
       type: String,
       required: true,
+      validate: {
+        validator: function (v: string) {
+          const yearNum = parseInt(v, 10);
+          return (
+            /^\d{4}$/.test(v) &&
+            yearNum >= 1886 &&
+            yearNum <= new Date().getFullYear()
+          );
+        },
+        message: (props: { value: string }) =>
+          `${props.value} is not a valid year! Year must be a four-digit number between 1886 and the current year.`,
+      },
     },
     engineSize: {
       type: String,
       required: true,
     },
     cylinder: {
-      type: String,
+      type: Number,
       required: true,
     },
     combustion: {
       type: String,
       required: true,
-      enum: Object.values(Combustion),
+      enum: Object.values(CombustionType),
     },
     engineType: {
       type: String,
       required: true,
       enum: Object.values(EngineType),
     },
-    productId: [
-      {
-        type: String,
-        ref: "Product",
-      },
-    ],
-    fileId: [
+    files: [
       {
         type: String,
         ref: "File",
@@ -69,6 +73,13 @@ const carModelSchema = new Schema<CarModelDocument>(
     timestamps: true,
   },
 );
+
+carModelSchema.pre("save", function (next) {
+  if (this.name) {
+    this.name = this.name.toUpperCase();
+  }
+  next();
+});
 
 const CarModel = mongoose.model<CarModelDocument>("CarModel", carModelSchema);
 
