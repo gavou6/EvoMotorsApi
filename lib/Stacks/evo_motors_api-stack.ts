@@ -63,5 +63,20 @@ export class EvoMotorsApiStack extends cdk.Stack {
       integration: props.brandLambdaIntegration,
       authorizer,
     });
+
+    //Patch routes
+    evoMotorsAdminHttpApi.addRoutes({
+      path: "/carModel",
+      methods: [HttpMethod.GET, HttpMethod.POST],
+      integration: props.brandLambdaIntegration,
+      authorizer,
+    });
+
+    evoMotorsAdminHttpApi.addRoutes({
+      path: "/carModel/{carModelId}",
+      methods: [HttpMethod.GET, HttpMethod.PATCH, HttpMethod.DELETE],
+      integration: props.brandLambdaIntegration,
+      authorizer,
+    });
   }
 }
