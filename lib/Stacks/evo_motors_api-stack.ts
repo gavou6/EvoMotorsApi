@@ -11,6 +11,7 @@ interface EvoMotorsApiStackProps extends cdk.StackProps {
   userPool: UserPool;
   userPoolClient: UserPoolClient;
   brandLambdaIntegration: HttpLambdaIntegration;
+  carModelLambdaIntegration: HttpLambdaIntegration;
 }
 
 export class EvoMotorsApiStack extends cdk.Stack {
@@ -68,14 +69,14 @@ export class EvoMotorsApiStack extends cdk.Stack {
     evoMotorsAdminHttpApi.addRoutes({
       path: "/carModel",
       methods: [HttpMethod.GET, HttpMethod.POST],
-      integration: props.brandLambdaIntegration,
+      integration: props.carModelLambdaIntegration,
       authorizer,
     });
 
     evoMotorsAdminHttpApi.addRoutes({
       path: "/carModel/{carModelId}",
       methods: [HttpMethod.GET, HttpMethod.PATCH, HttpMethod.DELETE],
-      integration: props.brandLambdaIntegration,
+      integration: props.carModelLambdaIntegration,
       authorizer,
     });
   }

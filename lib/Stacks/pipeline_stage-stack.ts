@@ -33,8 +33,15 @@ export class PipelineStage extends Stage {
       "EvoMotorsAdminAuthStack",
     );
 
+    //Brand lAMBDA
     const brandLambdaIntegration = new LambdaStack(this, "brandLambda", {
       lambdaDirectory: "Brand",
+      envVariables: lambdaVariables,
+    });
+
+    //CarModel Lambda
+    const carModelLambdaIntegration = new LambdaStack(this, "carModelLambda", {
+      lambdaDirectory: "CarModel",
       envVariables: lambdaVariables,
     });
 
@@ -43,6 +50,7 @@ export class PipelineStage extends Stage {
       userPool: evoMotorsAuthStack.getUserPool(),
       userPoolClient: evoMotorsAuthStack.getUserPoolClient(),
       brandLambdaIntegration: brandLambdaIntegration.lambdaIntegration,
+      carModelLambdaIntegration: carModelLambdaIntegration.lambdaIntegration,
     });
   }
 }
