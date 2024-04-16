@@ -49,6 +49,7 @@ export class CarModelRepository implements ICarModelRepository {
       doc.cylinder,
       doc.combustion,
       doc.engineType,
+      doc.files,
     );
     carModel.setId(doc._id.toString());
     return carModel;

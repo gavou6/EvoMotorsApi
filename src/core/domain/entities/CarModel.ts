@@ -11,6 +11,7 @@ export class CarModel {
     public cylinder: number,
     public combustion: CombustionType,
     public engineType: EngineType,
+    public files?: string[],
   ) {}
 
   setId(id: string) {
