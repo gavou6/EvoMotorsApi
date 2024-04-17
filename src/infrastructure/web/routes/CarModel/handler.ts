@@ -31,7 +31,7 @@ const createCarModelBodySchema = z.object({
   year: z.string().refine((val) => /^\d{4}$/.test(val), {
     message: "Year must be a four-digit number",
   }),
-  engine: z.string(),
+  engineSize: z.string(),
   cylinder: z.number().positive(),
   combustion: z.nativeEnum(CombustionType),
   engineType: z.nativeEnum(EngineType),
@@ -46,7 +46,7 @@ const updateCarModelBodySchema = z.object({
     .string()
     .regex(/^\d{4}$/, "Year must be a four-digit number")
     .optional(),
-  engine: z.string().optional(),
+  engineSize: z.string().optional(),
   cylinder: z.number().positive().optional(),
   combustion: z.nativeEnum(CombustionType).optional(),
   engineType: z.nativeEnum(EngineType).optional(),

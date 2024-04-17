@@ -50,7 +50,7 @@ export class EvoMotorsApiStack extends cdk.Stack {
       },
     );
 
-    //brand routes
+    //Brand routes
     evoMotorsAdminHttpApi.addRoutes({
       path: "/brand",
       methods: [HttpMethod.GET, HttpMethod.POST],
@@ -65,7 +65,7 @@ export class EvoMotorsApiStack extends cdk.Stack {
       authorizer,
     });
 
-    //Patch routes
+    //CarModel routes
     evoMotorsAdminHttpApi.addRoutes({
       path: "/carModel",
       methods: [HttpMethod.GET, HttpMethod.POST],

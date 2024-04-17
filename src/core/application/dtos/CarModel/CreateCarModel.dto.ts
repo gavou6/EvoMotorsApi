@@ -4,7 +4,7 @@ export type CreateCarModelDTO = {
   name: string;
   brandId: string;
   year: string;
-  engine: string;
+  engineSize: string;
   cylinder: number;
   combustion: CombustionType;
   engineType: EngineType;
