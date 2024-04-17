@@ -1,11 +1,12 @@
 import { CombustionType, EngineType } from "../../../shared/enums";
+import { Brand } from "./Brand";
 
 export class CarModel {
   public id?: string;
 
   constructor(
     public name: string,
-    public brandId: string,
+    public brandId: Brand,
     public year: string,
     public engineSize: string,
     public cylinder: number,

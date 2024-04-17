@@ -6,32 +6,46 @@ import {
   CreateCarModelDTO,
   UpdateCarModelDTO,
 } from "../../../core/application/dtos/CarModel";
+import { Brand } from "../../../core/domain/entities/Brand";
 
 interface CarModelDoc extends Document, CarModelDocument {}
 
 export class CarModelRepository implements ICarModelRepository {
   async findById(id: string): Promise<CarModel | null> {
-    const carModelDoc = await CarModelModel.findById(id).exec();
+    const carModelDoc = await CarModelModel.findById(id)
+      .populate("brandId")
+      .populate("files")
+      .exec();
     if (!carModelDoc) return null;
     return this.docToEntity(carModelDoc);
   }
 
   async findAll(): Promise<CarModel[]> {
-    const carModelDocs = await CarModelModel.find().exec();
+    const carModelDocs = await CarModelModel.find()
+      .populate("brandId")
+      .populate("files")
+      .exec();
     if (!carModelDocs.length) return [];
     return carModelDocs.map((doc) => this.docToEntity(doc)); // Convertir cada documento a una entidad Brand
   }
 
   async save(dto: CreateCarModelDTO): Promise<CarModel> {
     const carModelDoc = new CarModelModel(dto);
-    const savedBrandDoc = await carModelDoc.save();
-    return this.docToEntity(savedBrandDoc);
+    const savedCarModelDoc = await carModelDoc.save();
+    const populatedCarModelDoc = await savedCarModelDoc.populate(
+      "brandId",
+      "files",
+    );
+    return this.docToEntity(populatedCarModelDoc);
   }
 
   async update(id: string, dto: UpdateCarModelDTO): Promise<CarModel> {
     const updatedBrandDoc = await CarModelModel.findByIdAndUpdate(id, dto, {
       new: true,
-    }).exec();
+    })
+      .populate("brandId")
+      .populate("files")
+      .exec();
     if (!updatedBrandDoc) throw new Error("Car Model not found");
     return this.docToEntity(updatedBrandDoc);
   }
@@ -41,9 +55,12 @@ export class CarModelRepository implements ICarModelRepository {
   }
 
   private docToEntity(doc: CarModelDoc): CarModel {
+    const brand = new Brand(doc.brandId.name);
+    brand.setId(doc._id.toString());
+
     const carModel = new CarModel(
       doc.name,
-      doc.brandId,
+      brand,
       doc.year,
       doc.engineSize,
       doc.cylinder,
