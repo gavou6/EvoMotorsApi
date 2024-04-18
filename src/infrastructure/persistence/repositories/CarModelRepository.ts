@@ -1,6 +1,7 @@
 import { Document } from "mongoose";
 import { CarModel } from "../../../core/domain/entities/CarModel";
 import CarModelModel, { CarModelDocument } from "../models/CarModel.model";
+import BrandModel from "../models/Brand.model";
 import { ICarModelRepository } from "../../../core/application/interfaces/CarModel/ICarModelRepository";
 import {
   CreateCarModelDTO,
@@ -13,8 +14,7 @@ interface CarModelDoc extends Document, CarModelDocument {}
 export class CarModelRepository implements ICarModelRepository {
   async findById(id: string): Promise<CarModel | null> {
     const carModelDoc = await CarModelModel.findById(id)
-      .populate("brandId")
-      .populate("files")
+      .populate({ path: "brandId", model: BrandModel })
       .exec();
     if (!carModelDoc) return null;
     return this.docToEntity(carModelDoc);
@@ -22,8 +22,7 @@ export class CarModelRepository implements ICarModelRepository {
 
   async findAll(): Promise<CarModel[]> {
     const carModelDocs = await CarModelModel.find()
-      .populate("brandId")
-      .populate("files")
+      .populate({ path: "brandId", model: BrandModel })
       .exec();
     if (!carModelDocs.length) return [];
     return carModelDocs.map((doc) => this.docToEntity(doc)); // Convertir cada documento a una entidad Brand
@@ -32,10 +31,10 @@ export class CarModelRepository implements ICarModelRepository {
   async save(dto: CreateCarModelDTO): Promise<CarModel> {
     const carModelDoc = new CarModelModel(dto);
     const savedCarModelDoc = await carModelDoc.save();
-    const populatedCarModelDoc = await savedCarModelDoc.populate(
-      "brandId",
-      "files",
-    );
+    const populatedCarModelDoc = await savedCarModelDoc.populate({
+      path: "brandId",
+      model: BrandModel,
+    });
     return this.docToEntity(populatedCarModelDoc);
   }
 
@@ -43,8 +42,7 @@ export class CarModelRepository implements ICarModelRepository {
     const updatedBrandDoc = await CarModelModel.findByIdAndUpdate(id, dto, {
       new: true,
     })
-      .populate("brandId")
-      .populate("files")
+      .populate({ path: "brandId", model: BrandModel })
       .exec();
     if (!updatedBrandDoc) throw new Error("Car Model not found");
     return this.docToEntity(updatedBrandDoc);
