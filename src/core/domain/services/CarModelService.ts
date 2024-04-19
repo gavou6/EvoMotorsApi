@@ -1,5 +1,3 @@
-import { Brand } from "../entities/Brand";
-import { IBrandRepository } from "../../application/interfaces/Brand/IBrandRepository";
 import { ICarModelService } from "../../application/interfaces/CarModel/ICarModelService";
 import { CarModel } from "../entities/CarModel";
 import { ICarModelRepository } from "../../application/interfaces/CarModel/ICarModelRepository";
