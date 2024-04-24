@@ -2,6 +2,7 @@ import mongoose, { Schema, Document } from "mongoose";
 import { v4 as uuidV4 } from "uuid";
 import { CombustionType, EngineType } from "../../../shared/enums";
 import { Brand } from "../../../core/domain/entities/Brand";
+import { File } from "../../../core/domain/entities";
 
 export interface CarModelDocument extends Document {
   name: string;
@@ -11,7 +12,7 @@ export interface CarModelDocument extends Document {
   cylinder: number;
   combustion: CombustionType;
   engineType: EngineType;
-  files?: string[];
+  files?: File[];
 }
 
 const carModelSchema: Schema<CarModelDocument> = new Schema<CarModelDocument>(

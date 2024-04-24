@@ -1,9 +1,7 @@
 import { CombustionType, EngineType } from "../../../shared/enums";
-import { Brand } from "./Brand";
+import { Brand, File } from "./index";
 
 export class CarModel {
-  public id?: string;
-
   constructor(
     public name: string,
     public brandId: Brand,
@@ -12,12 +10,13 @@ export class CarModel {
     public cylinder: number,
     public combustion: CombustionType,
     public engineType: EngineType,
-    public files?: string[],
+    public files?: File[] | string[],
+    public _id?: string,
   ) {}
 
   setId(id: string) {
-    if (!this.id) {
-      this.id = id;
+    if (!this._id) {
+      this._id = id;
     }
   }
 }

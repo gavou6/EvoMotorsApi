@@ -1,13 +1,13 @@
 import { Document } from "mongoose";
 import { CarModel } from "../../../core/domain/entities/CarModel";
 import CarModelModel, { CarModelDocument } from "../models/CarModel.model";
-import BrandModel from "../models/Brand.model";
+import BrandModel, { BrandDocument } from "../models/Brand.model";
 import { ICarModelRepository } from "../../../core/application/interfaces/CarModel/ICarModelRepository";
 import {
   CreateCarModelDTO,
   UpdateCarModelDTO,
 } from "../../../core/application/dtos/CarModel";
-import { Brand } from "../../../core/domain/entities/Brand";
+import { File, Brand } from "../../../core/domain/entities";
 
 interface CarModelDoc extends Document, CarModelDocument {}
 
@@ -53,8 +53,14 @@ export class CarModelRepository implements ICarModelRepository {
   }
 
   private docToEntity(doc: CarModelDoc): CarModel {
-    const brand = new Brand(doc.brandId.name);
-    brand.setId(doc._id.toString());
+    const brand = new Brand(
+      doc.brandId.name,
+      doc.brandId.description,
+      doc.brandId._id,
+    );
+    const files = doc.files?.map(
+      (file) => new File(file.fileUrl, file.type, file._id!),
+    );
 
     const carModel = new CarModel(
       doc.name,
@@ -64,9 +70,9 @@ export class CarModelRepository implements ICarModelRepository {
       doc.cylinder,
       doc.combustion,
       doc.engineType,
-      doc.files,
+      files,
+      doc._id.toString(),
     );
-    carModel.setId(doc._id.toString());
     return carModel;
   }
 }
