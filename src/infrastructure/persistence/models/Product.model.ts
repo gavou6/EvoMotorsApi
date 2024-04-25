@@ -1,10 +1,9 @@
 import mongoose, { Schema, Document } from "mongoose";
 import { v4 as uuidV4 } from "uuid";
 
-interface ProductDocument extends Document {
-  _id: string;
+export interface ProductDocument extends Document {
   name: string;
-  part: string;
+  description?: string;
   price: number;
 }
 
@@ -18,7 +17,7 @@ const productSchema = new Schema<ProductDocument>(
       type: String,
       required: true,
     },
-    part: {
+    description: {
       type: String,
     },
     price: {

@@ -1,13 +1,12 @@
 import { Document } from "mongoose";
-import { CarModel } from "../../../core/domain/entities/CarModel";
 import CarModelModel, { CarModelDocument } from "../models/CarModel.model";
 import BrandModel, { BrandDocument } from "../models/Brand.model";
-import { ICarModelRepository } from "../../../core/application/interfaces/CarModel/ICarModelRepository";
+import { File, Brand, CarModel } from "../../../core/domain/entities";
+import { ICarModelRepository } from "../../../core/application/interfaces";
 import {
   CreateCarModelDTO,
   UpdateCarModelDTO,
-} from "../../../core/application/dtos/CarModel";
-import { File, Brand } from "../../../core/domain/entities";
+} from "../../../core/application/dtos";
 
 interface CarModelDoc extends Document, CarModelDocument {}
 

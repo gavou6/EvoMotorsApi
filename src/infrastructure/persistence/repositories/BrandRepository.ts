@@ -1,6 +1,6 @@
 import { Document } from "mongoose";
 import BrandModel, { BrandDocument } from "../models/Brand.model";
-import { IBrandRepository } from "../../../core/application/interfaces/Brand/IBrandRepository";
+import { IBrandRepository } from "../../../core/application/interfaces";
 import { Brand } from "../../../core/domain/entities";
 
 interface BrandDoc extends Document, BrandDocument {}

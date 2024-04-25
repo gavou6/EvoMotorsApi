@@ -1,10 +1,9 @@
-import { ICarModelService } from "../../application/interfaces/CarModel/ICarModelService";
-import { CarModel } from "../entities/CarModel";
-import { ICarModelRepository } from "../../application/interfaces/CarModel/ICarModelRepository";
+import { CreateCarModelDTO, UpdateCarModelDTO } from "../../application/dtos";
 import {
-  CreateCarModelDTO,
-  UpdateCarModelDTO,
-} from "../../application/dtos/CarModel";
+  ICarModelRepository,
+  ICarModelService,
+} from "../../application/interfaces";
+import { CarModel } from "../entities";
 
 export class CarModelService implements ICarModelService {
   constructor(private carModelRepository: ICarModelRepository) {}

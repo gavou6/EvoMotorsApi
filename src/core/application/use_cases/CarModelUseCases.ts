@@ -1,7 +1,6 @@
-import { ICarModelService } from "../interfaces/CarModel/ICarModelService";
-import { CreateCarModelDTO, UpdateCarModelDTO } from "../dtos/CarModel";
-import { CarModel } from "../../domain/entities/CarModel";
-import { ICarModelUseCases } from "../interfaces/CarModel/ICarModelUseCases";
+import { CarModel } from "../../domain/entities";
+import { CreateCarModelDTO, UpdateCarModelDTO } from "../dtos";
+import { ICarModelService, ICarModelUseCases } from "../interfaces";
 
 export class CarModelUseCases implements ICarModelUseCases {
   private carModelService: ICarModelService;
