@@ -6,10 +6,11 @@ import {
   CreateFileDTO,
   UpdateFileDTO,
 } from "../../../core/application/dtos/File";
+import { Brand, CarModel } from "../../../core/domain/entities";
 
 interface FileDoc extends Document, FileDocument {}
 
-export class CarModelRepository implements IFileRepository {
+export class FileRepository implements IFileRepository {
   async findById(id: string): Promise<File | null> {
     const fileDoc = await FileModel.findById(id).exec();
     if (!fileDoc) return null;
@@ -40,9 +41,60 @@ export class CarModelRepository implements IFileRepository {
     await FileModel.findByIdAndDelete(id).exec();
   }
 
-  private docToEntity(doc: FileDoc): File {
-    const file = new File(doc.fileUrl, doc.type);
-    file.setId(doc._id.toString());
-    return file;
+  private docToEntity(doc: FileDocument): File {
+    // Initialize placeholders for CarModel and File
+    let brand: Brand = new Brand("", "");
+    let carModelFiles: File[] = [];
+
+    if (
+      doc.carModelId &&
+      typeof doc.carModelId === "object" &&
+      "brandId" in doc.carModelId
+    ) {
+      if (
+        doc.carModelId.brandId &&
+        typeof doc.carModelId.brandId === "object"
+      ) {
+        brand = new Brand(
+          doc.carModelId.brandId.name,
+          doc.carModelId.brandId.description || "",
+          doc.carModelId.brandId._id,
+        );
+      }
+
+      if (Array.isArray(doc.carModelId.files)) {
+        carModelFiles = doc.carModelId.files.map((file) => {
+          if (
+            typeof file === "object" &&
+            file !== null &&
+            "fileUrl" in file &&
+            "type" in file &&
+            "_id" in file
+          ) {
+            return new File(file.fileUrl, file.type, file._id!);
+          } else {
+            throw new Error("File data is not fully populated");
+          }
+        });
+      }
+
+      const carModel = new CarModel(
+        doc.carModelId.name,
+        brand,
+        doc.carModelId.year,
+        doc.carModelId.engineSize,
+        doc.carModelId.cylinder,
+        doc.carModelId.combustion,
+        doc.carModelId.engineType,
+        carModelFiles,
+        doc.carModelId._id,
+      );
+
+      const file = new File(doc.fileUrl, doc.type, carModel._id!);
+      file.setId(doc._id.toString());
+      return file;
+    } else {
+      throw new Error("CarModel details are not properly populated");
+    }
   }
 }
