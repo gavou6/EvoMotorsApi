@@ -1,17 +1,17 @@
+import { CarModel } from ".";
 import { FileType } from "../../../shared/enums";
 
 export class File {
-  public id?: string; // Make `id` optional
-
   constructor(
     public fileUrl: string,
     public type: FileType,
+    public carModelId: CarModel | string,
+    public _id?: string,
   ) {}
 
-  // Method to set the id if it's not passed in the constructor
   setId(id: string) {
-    if (!this.id) {
-      this.id = id;
+    if (!this._id) {
+      this._id = id;
     }
   }
 }
