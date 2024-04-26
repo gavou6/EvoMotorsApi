@@ -1,8 +1,7 @@
 import mongoose, { Schema, Document } from "mongoose";
 import { v4 as uuidV4 } from "uuid";
 import { CombustionType, EngineType } from "../../../shared/enums";
-import { Brand } from "../../../core/domain/entities/Brand";
-import { File } from "../../../core/domain/entities";
+import { File, Brand } from "../../../core/domain/entities";
 
 export interface CarModelDocument extends Document {
   name: string;
