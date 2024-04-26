@@ -1,4 +1,4 @@
 export type UpdateProductDTO = {
-  name: string;
+  name?: string;
   description?: string;
 };
