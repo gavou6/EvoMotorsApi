@@ -4,7 +4,7 @@ handler(
   {
     requestContext: {
       http: {
-        method: "GET",
+        method: "POST",
       },
     },
     headers: {
