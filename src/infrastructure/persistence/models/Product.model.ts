@@ -4,7 +4,6 @@ import { v4 as uuidV4 } from "uuid";
 export interface ProductDocument extends Document {
   name: string;
   description?: string;
-  price: number;
 }
 
 const productSchema = new Schema<ProductDocument>(
@@ -20,17 +19,18 @@ const productSchema = new Schema<ProductDocument>(
     description: {
       type: String,
     },
-    price: {
-      type: Number,
-      required: true,
-    },
   },
   {
     timestamps: true,
   },
 );
 
-productSchema.set("autoIndex", false);
+productSchema.pre("save", function (next) {
+  if (this.name) {
+    this.name = this.name.toUpperCase();
+  }
+  next();
+});
 
 const Product = mongoose.model<ProductDocument>("Product", productSchema);
 
