@@ -150,7 +150,7 @@ export async function handler(
             statusCode: HTTP_BAD_REQUEST,
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              message: "Car Model ID is required in the path",
+              message: "Product ID is required in the path",
             }),
           };
         }
@@ -188,7 +188,7 @@ export async function handler(
             statusCode: HTTP_BAD_REQUEST,
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              message: "Car Model ID is required in the path",
+              message: "Product ID is required in the path",
             }),
           };
         }
@@ -202,7 +202,7 @@ export async function handler(
             statusCode: HTTP_BAD_REQUEST,
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              message: "Invalid or missing Car Model ID",
+              message: "Invalid or missing Product ID",
               errors: pathValidationResult.error.issues,
             }),
           };
@@ -216,7 +216,7 @@ export async function handler(
             statusCode: HTTP_OK,
             body: JSON.stringify({
               id: productId,
-              message: "Car Model removed successfully",
+              message: "Product removed successfully",
             }),
           };
         } catch (error) {
