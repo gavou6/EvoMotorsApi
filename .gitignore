@@ -12,6 +12,7 @@ command.txt
 evoapi.http
 
 # local testing
-test/Brand/
-test/CarModel/
-test/Product/
+test/Brand/*
+test/CarModel/*
+test/Product/*
+test/ProductPrice/*
