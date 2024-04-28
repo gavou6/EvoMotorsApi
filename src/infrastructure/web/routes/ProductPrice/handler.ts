@@ -224,7 +224,7 @@ export async function handler(
             statusCode: HTTP_OK,
             body: JSON.stringify({
               id: productPricePriceId,
-              message: "Car Model removed successfully",
+              message: "Product Price removed successfully",
             }),
           };
         } catch (error) {
