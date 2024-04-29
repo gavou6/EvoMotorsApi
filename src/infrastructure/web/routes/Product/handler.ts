@@ -20,7 +20,6 @@ import {
 import { decodeToken } from "../../../../shared/utils/userDecoder";
 import { CUSTOMER_ROLE } from "../../../../shared/constants/roles";
 import { IIdToken } from "../../../security/Auth";
-import { CombustionType, EngineType } from "../../../../shared/enums";
 import { ProductRepository } from "../../../persistence/repositories";
 import { ProductService } from "../../../../core/domain/services";
 import { ProductUseCases } from "../../../../core/application/use_cases";
@@ -32,7 +31,7 @@ const createProductBodySchema = z.object({
 
 const updateProductBodySchema = z.object({
   id: z.string(),
-  name: z.string(),
+  name: z.string().optional(),
   description: z.string().optional(),
 });
 
