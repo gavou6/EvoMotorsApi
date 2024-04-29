@@ -25,14 +25,16 @@ import { ProductPriceService } from "../../../../core/domain/services";
 import { ProductPriceUseCases } from "../../../../core/application/use_cases";
 
 const createProductPricePriceBodySchema = z.object({
-  name: z.string(),
-  description: z.string().optional(),
+  carModelId: z.string(),
+  productId: z.string(),
+  price: z.number(),
 });
 
 const updateProductPricePriceBodySchema = z.object({
   id: z.string(),
-  name: z.string(),
-  description: z.string().optional(),
+  carModelId: z.string().optional(),
+  productId: z.string().optional(),
+  price: z.string().optional(),
 });
 
 const removeProductPricePriceBody = z.object({

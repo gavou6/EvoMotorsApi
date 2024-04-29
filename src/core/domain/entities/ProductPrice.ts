@@ -4,6 +4,7 @@ export class ProductPrice {
   constructor(
     public carModelId: CarModel,
     public productId: Product,
+    public price: number,
     public _id?: string,
   ) {}
 

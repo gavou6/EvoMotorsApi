@@ -4,6 +4,7 @@ import ProductPriceModel, {
 } from "../models/ProductPrice.model";
 import CarModelModel from "../models/CarModel.model";
 import ProductModel from "../models/Product.model";
+import BrandModel from "../models/Brand.model";
 import {
   ProductPrice,
   CarModel,
@@ -21,7 +22,11 @@ interface ProductPriceDoc extends Document, ProductPriceDocument {}
 export class ProductPriceRepository implements IProductPriceRepository {
   async findById(id: string): Promise<ProductPrice | null> {
     const productPriceDoc = await ProductPriceModel.findById(id)
-      .populate({ path: "carModelId", model: CarModelModel })
+      .populate({
+        path: "carModelId",
+        model: CarModelModel,
+        populate: { path: "brandId", model: BrandModel },
+      })
       .populate({ path: "productId", model: ProductModel })
       .exec();
     if (!productPriceDoc) return null;
@@ -30,7 +35,11 @@ export class ProductPriceRepository implements IProductPriceRepository {
 
   async findAll(): Promise<ProductPrice[]> {
     const productPriceDocs = await ProductPriceModel.find()
-      .populate({ path: "carModelId", model: CarModelModel })
+      .populate({
+        path: "carModelId",
+        model: CarModelModel,
+        populate: { path: "brandId", model: BrandModel },
+      })
       .populate({ path: "productId", model: ProductModel })
       .exec();
     if (!productPriceDocs.length) return [];
@@ -43,7 +52,9 @@ export class ProductPriceRepository implements IProductPriceRepository {
     const populatedCarModelDoc = await savedProductPriceDoc.populate({
       path: "carModelId",
       model: CarModelModel,
+      populate: { path: "brandId", model: BrandModel },
     });
+
     const populatedProductModelDoc = await populatedCarModelDoc.populate({
       path: "productId",
       model: ProductModel,
@@ -55,7 +66,11 @@ export class ProductPriceRepository implements IProductPriceRepository {
     const updatedBrandDoc = await ProductPriceModel.findByIdAndUpdate(id, dto, {
       new: true,
     })
-      .populate({ path: "carModelId", model: CarModelModel })
+      .populate({
+        path: "carModelId",
+        model: CarModelModel,
+        populate: { path: "brandId", model: BrandModel },
+      })
       .populate({ path: "productId", model: ProductModel })
       .exec();
     if (!updatedBrandDoc) throw new Error("Car Model not found");
@@ -72,6 +87,7 @@ export class ProductPriceRepository implements IProductPriceRepository {
       doc.carModelId.brandId.description,
       doc.carModelId.brandId._id,
     );
+
     const carModel = new CarModel(
       doc.carModelId.name,
       brand,
@@ -90,7 +106,12 @@ export class ProductPriceRepository implements IProductPriceRepository {
       doc.productId._id,
     );
 
-    const productPrice = new ProductPrice(carModel, product, doc._id);
+    const productPrice = new ProductPrice(
+      carModel,
+      product,
+      doc.price,
+      doc._id,
+    );
     return productPrice;
   }
 }
