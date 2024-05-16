@@ -11,6 +11,8 @@ interface EvoMotorsApiStackProps extends cdk.StackProps {
   userPool: UserPool;
   userPoolClient: UserPoolClient;
   brandLambdaIntegration: HttpLambdaIntegration;
+  carModelLambdaIntegration: HttpLambdaIntegration;
+  productLambdaIntegration: HttpLambdaIntegration;
 }
 
 export class EvoMotorsApiStack extends cdk.Stack {
@@ -49,15 +51,48 @@ export class EvoMotorsApiStack extends cdk.Stack {
       },
     );
 
+    //Brand routes
     evoMotorsAdminHttpApi.addRoutes({
       path: "/brand",
-      methods: [
-        HttpMethod.GET,
-        HttpMethod.POST,
-        HttpMethod.PUT,
-        HttpMethod.DELETE,
-      ],
+      methods: [HttpMethod.GET, HttpMethod.POST],
       integration: props.brandLambdaIntegration,
+      authorizer,
+    });
+
+    evoMotorsAdminHttpApi.addRoutes({
+      path: "/brand/{brandId}",
+      methods: [HttpMethod.GET, HttpMethod.PUT, HttpMethod.DELETE],
+      integration: props.brandLambdaIntegration,
+      authorizer,
+    });
+
+    //CarModel routes
+    evoMotorsAdminHttpApi.addRoutes({
+      path: "/carModel",
+      methods: [HttpMethod.GET, HttpMethod.POST],
+      integration: props.carModelLambdaIntegration,
+      authorizer,
+    });
+
+    evoMotorsAdminHttpApi.addRoutes({
+      path: "/carModel/{carModelId}",
+      methods: [HttpMethod.GET, HttpMethod.PATCH, HttpMethod.DELETE],
+      integration: props.carModelLambdaIntegration,
+      authorizer,
+    });
+
+    //Product routes
+    evoMotorsAdminHttpApi.addRoutes({
+      path: "/product",
+      methods: [HttpMethod.GET, HttpMethod.POST],
+      integration: props.productLambdaIntegration,
+      authorizer,
+    });
+
+    evoMotorsAdminHttpApi.addRoutes({
+      path: "/product/{productId}",
+      methods: [HttpMethod.GET, HttpMethod.PATCH, HttpMethod.DELETE],
+      integration: props.productLambdaIntegration,
       authorizer,
     });
   }

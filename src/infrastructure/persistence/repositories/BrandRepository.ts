@@ -1,7 +1,7 @@
 import { Document } from "mongoose";
 import BrandModel, { BrandDocument } from "../models/Brand.model";
-import { IBrandRepository } from "../../../core/application/interfaces/Brand/IBrandRepository";
-import { Brand } from "../../../core/domain/entities/Brand";
+import { IBrandRepository } from "../../../core/application/interfaces";
+import { Brand } from "../../../core/domain/entities";
 
 interface BrandDoc extends Document, BrandDocument {}
 
@@ -45,8 +45,7 @@ export class BrandRepository implements IBrandRepository {
   }
 
   private docToEntity(doc: BrandDoc): Brand {
-    const brand = new Brand(doc.name, doc.description);
-    brand.setId(doc._id.toString());
+    const brand = new Brand(doc.name, doc.description, doc._id.toString());
     return brand;
   }
 }

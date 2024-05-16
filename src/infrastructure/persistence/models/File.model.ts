@@ -1,11 +1,13 @@
 import mongoose, { Schema, Document } from "mongoose";
 import { v4 as uuidV4 } from "uuid";
 import { FileType } from "../../../shared/enums";
+import { CarModel } from "../../../core/domain/entities";
 
-interface FileDocument extends Document {
-  _id: string;
+export interface FileDocument extends Document {
   fileUrl: string;
   type: FileType;
+  carModelId: CarModel | string;
+  platformId: string;
 }
 
 const fileSchema = new Schema<FileDocument>(
@@ -22,6 +24,16 @@ const fileSchema = new Schema<FileDocument>(
       type: String,
       required: true,
       enum: Object.values(FileType),
+    },
+    carModelId: {
+      type: String,
+      required: true,
+      ref: "CarModel",
+    },
+    platformId: {
+      type: String,
+      required: true,
+      ref: "Platform",
     },
   },
   {

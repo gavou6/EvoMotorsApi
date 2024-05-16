@@ -23,17 +23,31 @@ export class PipelineStage extends Stage {
       [key: string]: string;
     };
 
-    new EvoMotorsMongoAtlasStack(this, "EvoMotorsMongoStack", {
+    // TODO: Already created, causing issues after stack delition
+    /* new EvoMotorsMongoAtlasStack(this, "EvoMotorsMongoStack", {
       config: props.config,
-    });
+    }); */
 
     const evoMotorsAuthStack = new AdminAuthStack(
       this,
       "EvoMotorsAdminAuthStack",
     );
 
+    //Brand lAMBDA
     const brandLambdaIntegration = new LambdaStack(this, "brandLambda", {
       lambdaDirectory: "Brand",
+      envVariables: lambdaVariables,
+    });
+
+    //CarModel Lambda
+    const carModelLambdaIntegration = new LambdaStack(this, "carModelLambda", {
+      lambdaDirectory: "CarModel",
+      envVariables: lambdaVariables,
+    });
+
+    // Product Lambda
+    const productLambdaIntegration = new LambdaStack(this, "carModelLambda", {
+      lambdaDirectory: "Product",
       envVariables: lambdaVariables,
     });
 
@@ -42,6 +56,8 @@ export class PipelineStage extends Stage {
       userPool: evoMotorsAuthStack.getUserPool(),
       userPoolClient: evoMotorsAuthStack.getUserPoolClient(),
       brandLambdaIntegration: brandLambdaIntegration.lambdaIntegration,
+      carModelLambdaIntegration: carModelLambdaIntegration.lambdaIntegration,
+      productLambdaIntegration: productLambdaIntegration.lambdaIntegration,
     });
   }
 }
