@@ -1,4 +1,6 @@
 export class Brand {
+  public id?: string; // Make `id` optional
+
   constructor(
     public name: string,
     public description?: string,
