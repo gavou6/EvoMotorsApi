@@ -69,6 +69,12 @@ export class PipelineStage extends Stage {
       envVariables: lambdaVariables,
     });
 
+    //Receipt Lambda
+    const receiptLambdaIntegration = new LambdaStack(this, "ReceiptLambda", {
+      lambdaDirectory: "Receipt",
+      envVariables: lambdaVariables,
+    });
+
     new EvoMotorsApiStack(this, "EvoMotorsApiStack", {
       stageName: props.stageName,
       userPool: evoMotorsAuthStack.getUserPool(),
@@ -79,6 +85,7 @@ export class PipelineStage extends Stage {
       witnessLambdaIntegration: witnessLambdaIntegration.lambdaIntegration,
       remissionLambdaIntegration: remissionLambdaIntegration.lambdaIntegration,
       certificateLambdaIntegration: certificateLambdaIntegration.lambdaIntegration,
+      receiptLambdaIntegration: receiptLambdaIntegration.lambdaIntegration,
     });
   }
 }

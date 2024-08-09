@@ -16,6 +16,7 @@ interface EvoMotorsApiStackProps extends cdk.StackProps {
   witnessLambdaIntegration: HttpLambdaIntegration;
   remissionLambdaIntegration: HttpLambdaIntegration;
   certificateLambdaIntegration: HttpLambdaIntegration;
+  receiptLambdaIntegration: HttpLambdaIntegration;
 }
 
 export class EvoMotorsApiStack extends cdk.Stack {
@@ -143,5 +144,20 @@ export class EvoMotorsApiStack extends cdk.Stack {
       integration: props.certificateLambdaIntegration,
       authorizer,
     });
+
+      //Receipt routes
+      evoMotorsAdminHttpApi.addRoutes({
+        path: "/receipt",
+        methods: [HttpMethod.GET, HttpMethod.POST],
+        integration: props.receiptLambdaIntegration,
+        authorizer,
+      });
+  
+      evoMotorsAdminHttpApi.addRoutes({
+        path: "/receipt/{receiptId}",
+        methods: [HttpMethod.GET, HttpMethod.PATCH, HttpMethod.DELETE],
+        integration: props.receiptLambdaIntegration,
+        authorizer,
+      });
   }
 }
